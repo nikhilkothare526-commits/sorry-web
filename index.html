@@ -187,6 +187,41 @@
             opacity: 0.75;
         }
 
+        /* Music Button */
+
+        #musicBtn {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            padding: 12px 22px;
+
+            border: none;
+            border-radius: 30px;
+
+            background: rgba(255, 255, 255, 0.95);
+            color: #ff416c;
+
+            font-size: 15px;
+            font-weight: bold;
+
+            z-index: 9999;
+
+            box-shadow: 0 5px 20px rgba(0,0,0,0.25);
+
+            transition: 0.3s;
+        }
+
+        #musicBtn:hover {
+            transform: translateX(-50%) scale(1.08);
+        }
+
+        #musicBtn:active {
+            transform: translateX(-50%) scale(0.95);
+        }
+
     </style>
 
 </head>
@@ -205,9 +240,12 @@
 
             heart.className = "heart";
 
-            heart.innerHTML = ["❤️","💕","💗","💖","💘"][Math.floor(Math.random() * 5)];
+            heart.innerHTML =
+                ["❤️","💕","💗","💖","💘"]
+                [Math.floor(Math.random() * 5)];
 
-            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.left =
+                Math.random() * 100 + "vw";
 
             heart.style.animationDuration =
                 (5 + Math.random() * 5) + "s";
@@ -217,6 +255,7 @@
             setTimeout(() => {
                 heart.remove();
             }, 10000);
+
         }
 
         setInterval(createHeart, 700);
@@ -282,6 +321,18 @@
     </div>
 
 
+    <!-- Music -->
+
+    <audio id="bgMusic" loop>
+        <source src="Music.mp3" type="audio/mpeg">
+    </audio>
+
+
+    <button id="musicBtn" onclick="toggleMusic()">
+        🎵 Play Music
+    </button>
+
+
     <script>
 
         const messages = [
@@ -332,6 +383,8 @@
         let index = -1;
 
 
+        /* Sorry Messages */
+
         function startSorry() {
 
             index++;
@@ -364,36 +417,60 @@
         }
 
 
+        /* Forgive */
+
         function forgive() {
 
             document.getElementById("reply").innerHTML =
-                "Yesss! ❤️🥹<br><br>Thank you for forgiving me. Now please smile 😊";
+                "Yesss! ❤️🥹<br><br>" +
+                "Thank you for forgiving me. Now please smile 😊";
 
         }
 
+
+        /* Still Angry */
 
         function stillAngry() {
 
             document.getElementById("reply").innerHTML =
-                "Okay... I'll wait. 🥺❤️<br><br>But I'm still genuinely sorry.";
+                "Okay... I'll wait. 🥺❤️<br><br>" +
+                "But I'm still genuinely sorry.";
 
         }
-    </script>
-    <script>
-    
-function toggleMusic() {
-    const music = document.getElementById("bgMusic");
-    const button = document.getElementById("musicBtn");
 
-    if (music.paused) {
-        music.play();
-        button.innerHTML = "⏸️ Pause Music";
-    } else {
-        music.pause();
-        button.innerHTML = "🎵 Play Music";
-    }
-}
-        </script>
+
+        /* Music */
+
+        function toggleMusic() {
+
+            const music =
+                document.getElementById("bgMusic");
+
+            const button =
+                document.getElementById("musicBtn");
+
+
+            if (music.paused) {
+
+                music.play();
+
+                button.innerHTML =
+                    "⏸️ Pause Music";
+
+            }
+
+            else {
+
+                music.pause();
+
+                button.innerHTML =
+                    "🎵 Play Music";
+
+            }
+
+        }
+
+    </script>
 
 
 </body>
