@@ -26,8 +26,6 @@
             color: white;
         }
 
-        /* Floating Hearts */
-
         .heart {
             position: fixed;
             bottom: -30px;
@@ -35,10 +33,10 @@
             animation: float 7s linear infinite;
             opacity: 0.7;
             pointer-events: none;
+            z-index: 1;
         }
 
         @keyframes float {
-
             0% {
                 transform: translateY(0) rotate(0deg);
                 opacity: 0;
@@ -52,10 +50,7 @@
                 transform: translateY(-110vh) rotate(360deg);
                 opacity: 0;
             }
-
         }
-
-        /* Main Card */
 
         .card {
             width: 90%;
@@ -72,10 +67,12 @@
             box-shadow: 0 20px 50px rgba(0,0,0,0.25);
 
             animation: appear 1.2s ease;
+
+            position: relative;
+            z-index: 10;
         }
 
         @keyframes appear {
-
             from {
                 opacity: 0;
                 transform: scale(0.7);
@@ -85,7 +82,6 @@
                 opacity: 1;
                 transform: scale(1);
             }
-
         }
 
         .main-heart {
@@ -94,11 +90,9 @@
         }
 
         @keyframes heartbeat {
-
             50% {
                 transform: scale(1.18);
             }
-
         }
 
         h1 {
@@ -111,8 +105,6 @@
             opacity: 0.9;
             font-size: 14px;
         }
-
-        /* Message */
 
         #message {
             min-height: 120px;
@@ -134,8 +126,6 @@
             margin-bottom: 20px;
         }
 
-        /* Button */
-
         button {
             border: none;
             padding: 13px 25px;
@@ -156,11 +146,17 @@
             transform: scale(1.08);
         }
 
-        .final {
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .final,
+        .ending {
             display: none;
         }
 
-        .final h2 {
+        .final h2,
+        .ending h2 {
             font-size: 26px;
             margin: 20px 0;
         }
@@ -179,6 +175,33 @@
             margin-top: 20px;
             font-size: 18px;
             font-weight: bold;
+        }
+
+        .ending-text {
+            font-size: 18px;
+            line-height: 1.6;
+            margin: 15px 0 25px;
+        }
+
+        .surprise {
+            background: white;
+            color: #ff416c;
+            margin-top: 10px;
+        }
+
+        .retry {
+            background: rgba(255,255,255,0.9);
+            color: #7b2ff7;
+            margin-top: 10px;
+        }
+
+        .surprise-message {
+            display: none;
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            line-height: 1.6;
+            animation: appear 0.8s ease;
         }
 
         .footer {
@@ -222,10 +245,32 @@
             transform: translateX(-50%) scale(0.95);
         }
 
+        /* Confetti */
+
+        .confetti {
+            position: fixed;
+            top: -20px;
+            font-size: 25px;
+            animation: confettiFall 3s linear forwards;
+            z-index: 9998;
+            pointer-events: none;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(110vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
     </style>
 
 </head>
-
 
 <body>
 
@@ -276,6 +321,8 @@
         </p>
 
 
+        <!-- Main Messages -->
+
         <div id="main">
 
             <div id="message">
@@ -293,7 +340,7 @@
         </div>
 
 
-        <!-- Final Screen -->
+        <!-- Final Question -->
 
         <div class="final" id="final">
 
@@ -310,6 +357,84 @@
             </button>
 
             <div id="reply"></div>
+
+        </div>
+
+
+        <!-- YES Ending -->
+
+        <div class="ending" id="yesEnding">
+
+            <div class="main-heart">
+                🥹❤️
+            </div>
+
+            <h2>
+                YAY! You forgave me! ❤️
+            </h2>
+
+            <div class="ending-text">
+
+                Thank you for giving my apology a chance. 🫶<br><br>
+
+                I promise I'll remember the lesson behind this sorry. ❤️<br><br>
+
+                Now... please smile once. 😊
+
+            </div>
+
+            <button class="surprise" onclick="showSurprise()">
+                🎁 One Last Surprise
+            </button>
+
+            <div class="surprise-message" id="surpriseMessage">
+
+                ✨ SURPRISE ✨<br><br>
+
+                You're genuinely special. ❤️<br>
+
+                And yes...<br>
+
+                this whole website was just my little way of saying<br><br>
+
+                <strong>
+                    "I'm really sorry." 🥺❤️
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- Still Angry Ending -->
+
+        <div class="ending" id="angryEnding">
+
+            <div class="main-heart">
+                🥺
+            </div>
+
+            <h2>
+                Okay... I understand. 😭
+            </h2>
+
+            <div class="ending-text">
+
+                I won't force you to forgive me. 🫶<br><br>
+
+                Take your time.<br><br>
+
+                But one thing is still true...<br>
+
+                <strong>
+                    I'm genuinely sorry. ❤️
+                </strong>
+
+            </div>
+
+            <button class="retry" onclick="tryAgain()">
+                🥺 Try One More Time
+            </button>
 
         </div>
 
@@ -417,24 +542,104 @@
         }
 
 
-        /* Forgive */
+        /* YES */
 
         function forgive() {
 
-            document.getElementById("reply").innerHTML =
-                "Yesss! ❤️🥹<br><br>" +
-                "Thank you for forgiving me. Now please smile 😊";
+            document.getElementById("final").style.display =
+                "none";
+
+            document.getElementById("yesEnding").style.display =
+                "block";
+
+            createConfetti();
 
         }
 
 
-        /* Still Angry */
+        /* STILL ANGRY */
 
         function stillAngry() {
 
-            document.getElementById("reply").innerHTML =
-                "Okay... I'll wait. 🥺❤️<br><br>" +
-                "But I'm still genuinely sorry.";
+            document.getElementById("final").style.display =
+                "none";
+
+            document.getElementById("angryEnding").style.display =
+                "block";
+
+        }
+
+
+        /* One Last Surprise */
+
+        function showSurprise() {
+
+            document.getElementById("surpriseMessage").style.display =
+                "block";
+
+            createConfetti();
+
+        }
+
+
+        /* Try Again */
+
+        function tryAgain() {
+
+            document.getElementById("angryEnding").style.display =
+                "none";
+
+            document.getElementById("main").style.display =
+                "block";
+
+            index = -1;
+
+            document.getElementById("message").innerText =
+                "Okay... one more time. 🥺❤️";
+
+            document.getElementById("counter").innerText =
+                "Ready?";
+
+            document.querySelector("#main button").innerText =
+                "Open My Heart ❤️";
+
+        }
+
+
+        /* Confetti */
+
+        function createConfetti() {
+
+            const emojis =
+                ["❤️","💖","💕","✨","🎉","🥹"];
+
+            for (let i = 0; i < 35; i++) {
+
+                const confetti =
+                    document.createElement("div");
+
+                confetti.className = "confetti";
+
+                confetti.innerHTML =
+                    emojis[
+                        Math.floor(
+                            Math.random() * emojis.length
+                        )
+                    ];
+
+                confetti.style.left =
+                    Math.random() * 100 + "vw";
+
+                confetti.style.animationDuration =
+                    (2 + Math.random() * 2) + "s";
+
+                document.body.appendChild(confetti);
+
+                setTimeout(() => {
+                    confetti.remove();
+                }, 4000);
+
+            }
 
         }
 
