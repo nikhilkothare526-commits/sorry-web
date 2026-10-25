@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>100 Ways To Say Sorry ❤️</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #ff758c, #ff7eb3);
+            overflow: hidden;
+        }
+
+        .card {
+            width: 90%;
+            max-width: 450px;
+            padding: 35px 25px;
+            text-align: center;
+            background: rgba(255,255,255,0.18);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 25px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        h1 {
+            color: white;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .heart {
+            font-size: 45px;
+            animation: beat 1s infinite;
+        }
+
+        @keyframes beat {
+            50% {
+                transform: scale(1.2);
+            }
+        }
+
+        #message {
+            min-height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 21px;
+            font-weight: bold;
+            line-height: 1.5;
+            margin: 20px 0;
+        }
+
+        #count {
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        button {
+            border: none;
+            padding: 14px 28px;
+            border-radius: 30px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            background: white;
+            color: #ff4f81;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            transform: scale(1.08);
+        }
+
+        .small {
+            margin-top: 20px;
+            color: white;
+            font-size: 13px;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+
+        <div class="heart">❤️</div>
+
+        <h1>I'm Sorry</h1>
+
+        <div id="message">
+            I am sorry... 🥺
+        </div>
+
+        <div id="count">
+            1 / 100
+        </div>
+
+        <button onclick="nextSorry()">
+            Another Sorry ❤️
+        </button>
+
+        <p class="small">
+            100 different ways, but one feeling.
+        </p>
+
+    </div>
+
+
+    <script>
+
+        const sorry = [
+            "I am sorry ❤️",
+            "I'm really sorry 🥺",
+            "Sorry, meri galti thi 😔",
+            "Please forgive me ❤️",
+            "My bad... I'm sorry!",
+            "Sorry for hurting you 🥺",
+            "I genuinely regret it.",
+            "Can we start again? ❤️",
+            "Please don't stay angry with me.",
+            "Sorry, ab smile kar do 😊",
+
+            "Dil se sorry ❤️",
+            "Mujhse galti ho gayi.",
+            "Sach mein sorry!",
+            "Mujhe maaf kar do 🥺",
+            "Gussa chhod do na.",
+            "Ek baar smile kar do 😊",
+            "I'm sorry, honestly.",
+            "No excuses. Just sorry.",
+            "I know I was wrong.",
+            "I should have done better.",
+
+            "Error 404: My good decision not found 😂",
+            "Bug detected: I hurt you.",
+            "Fixing my mistake... ❤️",
+            "Compilation failed because I messed up 😭",
+            "Sorry.exe is running...",
+            "Please accept my apology update.",
+            "Version 2.0: Fewer mistakes ❤️",
+            "Debugging my behavior... 😂",
+            "System message: I AM SORRY ❤️",
+            "Forgiveness.exe please run 🥺",
+
+            "Sorry, tumhe hurt karna intention nahi tha.",
+            "I wish I could undo my mistake.",
+            "You deserve an apology.",
+            "I don't like seeing you upset.",
+            "Sorry for ruining your mood.",
+            "I should have thought first.",
+            "I understand why you're upset.",
+            "I take responsibility. Sorry.",
+            "I hope you can forgive me.",
+            "I'm sorry for everything.",
+
+            "Sorry, ab naraz mat raho ❤️",
+            "Tumhari smile wapas chahiye 😊",
+            "Sorry, can I borrow your forgiveness?",
+            "One sorry, unlimited smiles 😉",
+            "Please give me one chance.",
+            "Sorry, peace offering ready hai 😄",
+            "Gussa tum par cute lagta hai.",
+            "But please forgive me 🥺",
+            "Ek smile toh banti hai 😊",
+            "Please don't stay mad at me.",
+
+            "I was wrong. You were right.",
+            "I accept my mistake.",
+            "I'm sorry for my behavior.",
+            "I could have handled it better.",
+            "I regret what I said.",
+            "I'm sorry for disappointing you.",
+            "I'm sorry for being careless.",
+            "I'm sorry. I mean it.",
+            "I never wanted to hurt you.",
+            "You deserved better from me.",
+
+            "Sorry, meri coding mein bug aa gaya 😂",
+            "Please approve my apology PR ❤️",
+            "Apology successfully submitted 😎",
+            "Waiting for forgiveness... ⏳",
+            "Forgiveness.exe loading...",
+            "My heart says: APOLOGIZE!",
+            "Code crashed, feelings didn't ❤️",
+            "I made a mistake, not a goodbye.",
+            "Let's restart on a better note.",
+            "Can we reset this moment? ❤️",
+
+            "Sorry for making you feel bad.",
+            "I'm sorry, truly.",
+            "Please give me another chance.",
+            "I'll try to do better.",
+            "I'm learning from my mistake.",
+            "Sorry for not understanding.",
+            "I should have listened.",
+            "Sorry for being careless.",
+            "I never meant to upset you.",
+            "I'm genuinely sorry.",
+
+            "Okay... I'm REALLY sorry ❤️",
+            "Still angry? 🥺",
+            "Okay, another sorry...",
+            "And another one ❤️",
+            "And another one... 😭",
+            "I hope you're smiling now.",
+            "Please accept this little apology.",
+            "Sending you a virtual sorry ❤️",
+            "Last chance to forgive me? 🥺",
+            "I AM SORRY ❤️"
+        ];
+
+        let index = 0;
+
+        function nextSorry() {
+
+            index++;
+
+            if (index >= sorry.length) {
+                index = 0;
+            }
+
+            document.getElementById("message").innerText = sorry[index];
+
+            document.getElementById("count").innerText =
+                (index + 1) + " / 100";
+        }
+
+    </script>
+
+</body>
+</html>
