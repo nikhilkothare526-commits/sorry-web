@@ -264,7 +264,18 @@
     background: #10000b;
     box-shadow: 0 0 25px #ff168a;
         }
+body {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
 
+.card {
+    margin: 30px auto 90px;
+}
+
+#sorryArt {
+    height: auto;
+}
         @keyframes confettiFall {
             0% {
                 transform: translateY(0) rotate(0deg);
@@ -398,21 +409,20 @@
 
             <div class="surprise-message" id="surpriseMessage">
 
-                ✨ SURPRISE ✨<br><br>
+    ✨ SURPRISE ✨
 
-                You're genuinely special. ❤️<br>
+    <p>Something special for you ❤️</p>
 
-                And yes...<br>
+    <canvas id="sorryArt"
+            width="360"
+            height="420">
+    </canvas>
 
-                this whole website was just my little way of saying<br><br>
+    <h2>I AM SORRY ❤️</h2>
 
-                <strong>
-                    "I'm really sorry." 🥺❤️
-                </strong>
+    <p>Every word comes from my heart. 🥺</p>
 
-            </div>
-
-        </div>
+</div>
 
 
         <!-- Still Angry Ending -->
@@ -577,7 +587,20 @@
                 "block";
 
         }
+function showSurprise() {
 
+    const surprise =
+        document.getElementById("surpriseMessage");
+
+    surprise.style.display = "block";
+
+    surprise.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+
+    createSorryFace();
+}
 
         /* One Last Surprise */
 
@@ -598,7 +621,7 @@
         // Latest uploaded photo: girl's face and hair crop
         octx.drawImage(
             img,
-            290, 170, 380, 440,
+            280, 1û0, 400, 500,
             0, 0, 180, 210
         );
 
