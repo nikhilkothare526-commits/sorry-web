@@ -587,41 +587,55 @@ body {
                 "block";
 
         }
-function showSurprise() {
+        function showSurprise() {
 
-    const surprise =
-        document.getElementById("surpriseMessage");
+    const surprise = document.getElementById("surpriseMessage");
 
     surprise.style.display = "block";
 
-    surprise.scrollIntoView({
-        behavior: "smooth",
-        block: "center"
-    });
-
     createSorryFace();
+
+    setTimeout(() => {
+        surprise.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+    }, 100);
 }
 
-        /* One Last Surprise */
 
-        function createSorryFace() {
+function createSorryFace() {
+
     const canvas = document.getElementById("sorryArt");
     const ctx = canvas.getContext("2d");
 
+    ctx.clearRect(0, 0, 360, 420);
+
     const img = new Image();
-    img.src = "girl.jpg";
 
     img.onload = function () {
+
         const off = document.createElement("canvas");
         off.width = 180;
         off.height = 210;
 
         const octx = off.getContext("2d");
 
-        // Latest uploaded photo: girl's face and hair crop
+        // Automatically fit the uploaded photo
+        const scale = Math.max(
+            180 / img.width,
+            210 / img.height
+        );
+
+        const sw = 180 / scale;
+        const sh = 210 / scale;
+
+        const sx = (img.width - sw) / 2;
+        const sy = (img.height - sh) / 2;
+
         octx.drawImage(
             img,
-            280, 1û0, 400, 500,
+            sx, sy, sw, sh,
             0, 0, 180, 210
         );
 
@@ -629,10 +643,12 @@ function showSurprise() {
             0, 0, 180, 210
         ).data;
 
-        let points = [];
+        const points = [];
 
-        for (let y = 3; y < 210; y += 4) {
-            for (let x = 3; x < 180; x += 4) {
+        for (let y = 4; y < 210; y += 8) {
+
+            for (let x = 4; x < 180; x += 8) {
+
                 const i = (y * 180 + x) * 4;
 
                 const brightness =
@@ -642,40 +658,55 @@ function showSurprise() {
                 points.push({
                     x: x * 2,
                     y: y * 2,
-                    brightness
+                    brightness: brightness
                 });
             }
         }
 
-        let index = 0;
+        let current = 0;
 
         function animate() {
-            for (
-                let j = 0;
-                j < 100 && index < points.length;
-                j++, index++
-            ) {
-                const p = points[index];
+
+            let count = 0;
+
+            while (count < 100 && current < points.length) {
+
+                const p = points[current];
 
                 ctx.fillStyle = p.brightness > 130
                     ? "#ffb6e0"
                     : "#ff168a";
 
-                ctx.font = "bold 8px Arial";
+                ctx.font = "bold 7px Arial";
                 ctx.shadowColor = "#ff168a";
-                ctx.shadowBlur = 5;
+                ctx.shadowBlur = 4;
 
-                ctx.fillText("I AM SORRY", p.x, p.y);
+                ctx.fillText(
+                    "I AM SORRY",
+                    p.x,
+                    p.y
+                );
+
+                current++;
+                count++;
             }
 
-            if (index < points.length) {
+            if (current < points.length) {
                 requestAnimationFrame(animate);
             }
         }
 
         animate();
     };
-                }
+
+    img.onerror = function () {
+        ctx.fillStyle = "white";
+        ctx.font = "16px Arial";
+        ctx.fillText("Photo not found!", 90, 200);
+    };
+
+    img.src = "girl.jpg";
+}
 
         /* Try Again */
 
