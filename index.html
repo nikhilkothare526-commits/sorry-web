@@ -264,6 +264,15 @@
     background: #10000b;
     box-shadow: 0 0 25px #ff168a;
         }
+        #sorryArt {
+    width: 100%;
+    max-width: 360px;
+    height: auto;
+    display: block;
+    margin: 20px auto;
+    background: #000;
+    border-radius: 18px;
+        }
 body {
     overflow-x: hidden;
     overflow-y: auto;
@@ -409,7 +418,7 @@ body {
 
             <div class="surprise-message" id="surpriseMessage">
 
-    ✨ SURPRISE ✨
+    <h2>✨ SURPRISE ✨</h2>
 
     <p>Something special for you ❤️</p>
 
@@ -418,9 +427,7 @@ body {
             height="420">
     </canvas>
 
-    <h2>I AM SORRY ❤️</h2>
-
-    <p>Every word comes from my heart. 🥺</p>
+    <p>Every sparkle carries a little apology. ❤️</p>
 
 </div>
 
@@ -600,113 +607,180 @@ body {
             behavior: "smooth",
             block: "center"
         });
-    }, 100);
+    }, 200);
 }
 
+let particleAnimation;
 
 function createSorryFace() {
 
     const canvas = document.getElementById("sorryArt");
     const ctx = canvas.getContext("2d");
 
-    ctx.clearRect(0, 0, 360, 420);
+    // Stop previous animation if restarted
+    if (particleAnimation) {
+        cancelAnimationFrame(particleAnimation);
+    }
 
     const img = new Image();
 
     img.onload = function () {
 
         const off = document.createElement("canvas");
-        off.width = 180;
-        off.height = 210;
+        off.width = 360;
+        off.height = 420;
 
         const octx = off.getContext("2d");
 
-        // Automatically fit the uploaded photo
-        const scale = Math.max(
-            180 / img.width,
-            210 / img.height
+        // Fit photo inside canvas without stretching
+        const scale = Math.min(
+            360 / img.width,
+            420 / img.height
         );
 
-        const sw = 180 / scale;
-        const sh = 210 / scale;
+        const w = img.width * scale;
+        const h = img.height * scale;
 
-        const sx = (img.width - sw) / 2;
-        const sy = (img.height - sh) / 2;
+        const x = (360 - w) / 2;
+        const y = (420 - h) / 2;
 
-        octx.drawImage(
-            img,
-            sx, sy, sw, sh,
-            0, 0, 180, 210
-        );
+        octx.clearRect(0, 0, 360, 420);
+        octx.drawImage(img, x, y, w, h);
 
         const pixels = octx.getImageData(
-            0, 0, 180, 210
+            0, 0, 360, 420
         ).data;
 
-        const points = [];
+        const particles = [];
 
-        for (let y = 4; y < 210; y += 8) {
+        // Create particles from visible photo pixels
+        for (let py = 2; py < 420; py += 5) {
 
-            for (let x = 4; x < 180; x += 8) {
+            for (let px = 2; px < 360; px += 5) {
 
-                const i = (y * 180 + x) * 4;
+                const i = (py * 360 + px) * 4;
 
-                const brightness =
-                    (pixels[i] + pixels[i + 1] +
-                    pixels[i + 2]) / 3;
+                const r = pixels[i];
+                const g = pixels[i + 1];
+                const b = pixels[i + 2];
+                const a = pixels[i + 3];
 
-                points.push({
-                    x: x * 2,
-                    y: y * 2,
-                    brightness: brightness
+                // Ignore transparent background
+                if (a < 100) continue;
+
+                const brightness = (r + g + b) / 3;
+
+                let color;
+
+                if (brightness > 190) {
+                    color = "#fff0e8";
+                } else if (brightness > 110) {
+                    color = "#ffc4dc";
+                } else {
+                    color = "#e879aa";
+                }
+
+                particles.push({
+
+                    x: px,
+                    y: py,
+
+                    startX: Math.random() * 360,
+                    startY: 420 + Math.random() * 180,
+
+                    color: color,
+
+                    size: 0.7 + Math.random() * 0.9,
+
+                    delay: Math.random() * 0.65,
+
+                    phase: Math.random() * Math.PI * 2
+
                 });
             }
         }
 
-        let current = 0;
+        const startTime = performance.now();
 
-        function animate() {
+        function animate(now) {
 
-            let count = 0;
+            ctx.clearRect(0, 0, 360, 420);
 
-            while (count < 100 && current < points.length) {
+            // Pure black background
+            ctx.fillStyle = "#000";
+            ctx.fillRect(0, 0, 360, 420);
 
-                const p = points[current];
+            const elapsed = (now - startTime) / 1000;
 
-                ctx.fillStyle = p.brightness > 130
-                    ? "#ffb6e0"
-                    : "#ff168a";
+            particles.forEach(p => {
 
-                ctx.font = "bold 7px Arial";
-                ctx.shadowColor = "#ff168a";
-                ctx.shadowBlur = 4;
-
-                ctx.fillText(
-                    "I AM SORRY",
-                    p.x,
-                    p.y
+                let progress = Math.max(
+                    0,
+                    Math.min(1, (elapsed - p.delay) / 3.5)
                 );
 
-                current++;
-                count++;
-            }
+                // Smooth movement from bottom to portrait
+                const ease = 1 - Math.pow(1 - progress, 3);
 
-            if (current < points.length) {
-                requestAnimationFrame(animate);
-            }
+                const float = progress >= 1
+                    ? Math.sin(now / 1100 + p.phase) * 1.2
+                    : 0;
+
+                const currentX =
+                    p.startX + (p.x - p.startX) * ease;
+
+                const currentY =
+                    p.startY + (p.y - p.startY) * ease + float;
+
+                const opacity = Math.min(
+                    1,
+                    progress * 1.5
+                );
+
+                ctx.globalAlpha = opacity;
+
+                ctx.fillStyle = p.color;
+
+                // Subtle glow
+                ctx.shadowColor = p.color;
+                ctx.shadowBlur = 3;
+
+                ctx.beginPath();
+
+                ctx.arc(
+                    currentX,
+                    currentY,
+                    p.size,
+                    0,
+                    Math.PI * 2
+                );
+
+                ctx.fill();
+
+            });
+
+            ctx.globalAlpha = 1;
+            ctx.shadowBlur = 0;
+
+            // Continue gentle sparkling
+            particleAnimation = requestAnimationFrame(animate);
         }
 
-        animate();
+        particleAnimation = requestAnimationFrame(animate);
     };
 
     img.onerror = function () {
+
+        ctx.clearRect(0, 0, 360, 420);
         ctx.fillStyle = "white";
         ctx.font = "16px Arial";
-        ctx.fillText("Photo not found!", 90, 200);
+        ctx.fillText("Photo not found!", 110, 210);
+
     };
 
-    img.src = "girl.jpg";
-}
+    img.src = "girl.png";
+                    }
+
 
         /* Try Again */
 
