@@ -661,16 +661,20 @@ function createSorryFace() {
                 if (a < 100) continue;
 
                 const brightness = (r + g + b) / 3;
+                 let color;
 
-                let color;
+if (brightness > 190) {
+    color = "#ffffff";
+} else if (brightness > 110) {
+    color = "#cfd8e3";
+} else {
+    color = "#788594";
+}
+        
+                ctx.fillStyle = p.color;
 
-                if (brightness > 190) {
-                    color = "#fff0e8";
-                } else if (brightness > 110) {
-                    color = "#ffc4dc";
-                } else {
-                    color = "#e879aa";
-                }
+ctx.shadowColor = "#dce6f2";
+ctx.shadowBlur = 4;
 
                 particles.push({
 
