@@ -767,24 +767,7 @@ function createSorryFace() {
     img.src = "./girl.png";
 }
 
-const brightness =
-    0.299 * r +
-    0.587 * g +
-    0.114 * b;
 
-if (brightness < 25) continue;
-
-const silver = Math.round(
-    135 + (brightness / 255) * 120
-);
-
-const alpha = 0.45 + (brightness / 255) * 0.5;
-
-const particleColor =
-    `rgba(${silver}, ${silver}, ${silver}, ${alpha})`;
-        ctx.shadowColor = "rgba(220, 230, 245, 0.45)";
-ctx.shadowBlur = 3;
-ctx.fillStyle = particleColor;
 
         /* Try Again */
 
