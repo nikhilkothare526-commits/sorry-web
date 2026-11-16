@@ -355,7 +355,7 @@ body {
             </div>
 
             <button onclick="startSorry()">
-                Open My Heart ❤️
+                Another sorry ❤️
             </button>
 
         </div>
@@ -477,6 +477,7 @@ body {
 
 
     <script>
+        alert("JavaScript is working!");
 
         const messages = [
 
@@ -530,33 +531,29 @@ body {
 
         function startSorry() {
 
-            index++;
+    console.log("Start button clicked!");
 
-            if (index < messages.length) {
+    index++;
 
-                document.getElementById("message").innerText =
-                    messages[index];
+    if (index < messages.length) {
 
-                document.getElementById("counter").innerText =
-                    (index + 1) + " / 20";
+        document.getElementById("message").innerText =
+            messages[index];
 
-                document.querySelector("#main button").innerText =
-                    index === 19
-                    ? "One Last Thing ❤️"
-                    : "Another Sorry ❤️";
+        document.getElementById("counter").innerText =
+            (index + 1) + " / 20";
 
-            }
+        document.querySelector("#main button").innerText =
+            index === 19
+            ? "One Last Thing ❤️"
+            : "Another Sorry ❤️";
 
-            else {
+    } else {
 
-                document.getElementById("main").style.display =
-                    "none";
+        document.getElementById("main").style.display = "none";
+        document.getElementById("final").style.display = "block";
 
-                document.getElementById("final").style.display =
-                    "block";
-
-            }
-
+    }
         }
 
 
@@ -833,35 +830,30 @@ function createSorryFace() {
 
         /* Music */
 
-        function toggleMusic() {
+        async function toggleMusic() {
 
-            const music =
-                document.getElementById("bgMusic");
+    const music = document.getElementById("bgMusic");
+    const button = document.getElementById("musicBtn");
 
-            const button =
-                document.getElementById("musicBtn");
+    if (music.paused) {
 
-
-            if (music.paused) {
-
-                music.play();
-
-                button.innerHTML =
-                    "⏸️ Pause Music";
-
-            }
-
-            else {
-
-                music.pause();
-
-                button.innerHTML =
-                    "🎵 Play Music";
-
-            }
-
+        try {
+            await music.play();
+            button.innerHTML = "⏸️ Pause Music";
         }
 
+        catch (error) {
+            console.error("Music Error:", error);
+            alert("Music file nahi mil rahi. Music.mp3 check karein!");
+        }
+
+    } else {
+
+        music.pause();
+        button.innerHTML = "🎵 Play Music";
+
+    }
+        }
     </script>
 
 
