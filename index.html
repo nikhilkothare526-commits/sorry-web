@@ -422,7 +422,7 @@ body {
     <p>Every sparkle carries a little apology. ❤️</p>
 
 </div>
-
+</div>
 
         <!-- Still Angry Ending -->
 
@@ -602,6 +602,7 @@ body {
     }, 200);
 }
 
+    
 let particleAnimation;
 
 function createSorryFace() {
@@ -609,7 +610,6 @@ function createSorryFace() {
     const canvas = document.getElementById("sorryArt");
     const ctx = canvas.getContext("2d");
 
-    // Stop previous animation if restarted
     if (particleAnimation) {
         cancelAnimationFrame(particleAnimation);
     }
@@ -624,7 +624,6 @@ function createSorryFace() {
 
         const octx = off.getContext("2d");
 
-        // Fit photo inside canvas without stretching
         const scale = Math.min(
             360 / img.width,
             420 / img.height
@@ -645,10 +644,9 @@ function createSorryFace() {
 
         const particles = [];
 
-        // Create particles from visible photo pixels
-        for (let py = 2; py < 420; py += 5) {
+        for (let py = 2; py < 420; py += 4) {
 
-            for (let px = 2; px < 360; px += 5) {
+            for (let px = 2; px < 360; px += 4) {
 
                 const i = (py * 360 + px) * 4;
 
@@ -657,24 +655,26 @@ function createSorryFace() {
                 const b = pixels[i + 2];
                 const a = pixels[i + 3];
 
-                // Ignore transparent background
                 if (a < 100) continue;
 
-                const brightness = (r + g + b) / 3;
-                 let color;
+                // Grayscale brightness
+                const brightness =
+                    0.299 * r +
+                    0.587 * g +
+                    0.114 * b;
 
-if (brightness > 190) {
-    color = "#ffffff";
-} else if (brightness > 110) {
-    color = "#cfd8e3";
-} else {
-    color = "#788594";
-}
-        
-                ctx.fillStyle = p.color;
+                if (brightness < 25) continue;
 
-ctx.shadowColor = "#dce6f2";
-ctx.shadowBlur = 4;
+                // Silver shades
+                const silver = Math.round(
+                    135 + (brightness / 255) * 120
+                );
+
+                const alpha =
+                    0.45 + (brightness / 255) * 0.5;
+
+                const color =
+                    `rgba(${silver}, ${silver}, ${silver}, ${alpha})`;
 
                 particles.push({
 
@@ -702,7 +702,6 @@ ctx.shadowBlur = 4;
 
             ctx.clearRect(0, 0, 360, 420);
 
-            // Pure black background
             ctx.fillStyle = "#000";
             ctx.fillRect(0, 0, 360, 420);
 
@@ -715,7 +714,6 @@ ctx.shadowBlur = 4;
                     Math.min(1, (elapsed - p.delay) / 3.5)
                 );
 
-                // Smooth movement from bottom to portrait
                 const ease = 1 - Math.pow(1 - progress, 3);
 
                 const float = progress >= 1
@@ -728,17 +726,10 @@ ctx.shadowBlur = 4;
                 const currentY =
                     p.startY + (p.y - p.startY) * ease + float;
 
-                const opacity = Math.min(
-                    1,
-                    progress * 1.5
-                );
-
-                ctx.globalAlpha = opacity;
+                ctx.globalAlpha = Math.min(1, progress * 1.5);
 
                 ctx.fillStyle = p.color;
-
-                // Subtle glow
-                ctx.shadowColor = p.color;
+                ctx.shadowColor = "rgba(220, 230, 245, 0.45)";
                 ctx.shadowBlur = 3;
 
                 ctx.beginPath();
@@ -758,7 +749,6 @@ ctx.shadowBlur = 4;
             ctx.globalAlpha = 1;
             ctx.shadowBlur = 0;
 
-            // Continue gentle sparkling
             particleAnimation = requestAnimationFrame(animate);
         }
 
@@ -775,7 +765,8 @@ ctx.shadowBlur = 4;
     };
 
     img.src = "./girl.png";
-                    }
+}
+
 const brightness =
     0.299 * r +
     0.587 * g +
